@@ -90,7 +90,7 @@ public class CollisionChecker {
                             }
                             if(player){
 
-                                index = 1;
+                                index = i;
                             }
                         }
                         break;
@@ -102,7 +102,7 @@ public class CollisionChecker {
                                 }
                                 if(player){
 
-                                    index = 1;
+                                    index = i;
                                 }
                             }
                         break;
@@ -114,7 +114,7 @@ public class CollisionChecker {
                                 }
                                 if(player){
 
-                                    index = 1;
+                                    index = i;
                                 }
                             }
                         break;

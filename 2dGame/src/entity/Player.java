@@ -2,6 +2,8 @@ package entity;
 
 import main.GamePanel;
 import main.GameKeyHandler;
+import main.UtilityTool;
+
 import java.awt.Rectangle;
 import java.awt.Graphics2D;
 import java.awt.Color;
@@ -16,7 +18,7 @@ public class Player extends Entity{
 
 	public final int screenX;
 	public final int screenY;
-    int hasKey = 0;
+    public int hasKey = 0;
 
 	public Player(GamePanel gp, GameKeyHandler keyH) {
 		
@@ -43,22 +45,35 @@ public class Player extends Entity{
 	}
 
 	public void getPlayerImage() {
-		try {
-			up1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_up_1.png"));
-			up2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_up_2.png"));
-			down1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_down_1.png"));
-			down2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_down_2.png"));
-			left1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_left_1.png"));
-			left2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_left_2.png"));
-			right1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_right_1.png"));
-			right2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_right_2.png"));
-		}
-		catch(IOException e) {
-			e.printStackTrace();
-		}
+
 
 
 	}
+    public BufferedImage setUp(String imageName){
+
+        UtilityTool uTool = new UtilityTool();
+        BufferedImage image = null;
+        try{
+            image = ImageIO.read(getClass().getResourceAsStream("/player/"+imageName+".png"));
+            image = uTool.scaleImage(image, gp.tileSize, gp.tileSize);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+        up1 = setUp("boy_up_1");
+        up2 = setUp("boy_up_2");
+        down1 = setUp("boy_down_1");
+        down2 = setUp("boy_down_2");
+        left1 = setUp("boy_left_1");
+        left2 = setUp("boy_left_2");
+        right1 = setUp("boy_right_1");
+        right2 = setUp("boy_right_2");
+
+
+
+        return image;
+    }
 	public void update() {
 		if ((keyH.upPressed) || (keyH.downPressed) || (keyH.leftPressed) || (keyH.rightPressed)) {
 
@@ -111,13 +126,29 @@ public class Player extends Entity{
 
     switch(objectName){
         case "Key":
+            gp.playSE(1);
             hasKey++;
             gp.obj[i] = null;
+            gp.ui.showMessage("You got a key!");
+
             break;
         case "Door": if(hasKey > 0) {
+            gp.playSE(3);
             gp.obj[i] = null;
             hasKey--;
+            gp.ui.showMessage("Door opened!");
         }
+            break;
+        case "Boots":
+            gp.playSE(2);
+            speed += 2;
+            gp.obj[i] = null;
+            gp.ui.showMessage("You got speed boots!");
+            break;
+        case "Chest":
+        gp.ui.gameFinished = true;
+        gp.stopMusic();
+        gp.playSE(4);
             break;
 
 
@@ -136,23 +167,23 @@ public class Player extends Entity{
 		case "up":
 		if (spriteNum == 1) image = up1;	
 		if (spriteNum == 2) image = up2;
-			break;
+        break;
 		case "down":
 
 		if (spriteNum == 1) image = down1;
 		if (spriteNum == 2) image = down2;
-			break;
+        break;
 		case "left":
 		if (spriteNum == 1) image = left1;
 		if (spriteNum == 2) image = left2;
-			break;
+        break;
 		case "right":
 		if (spriteNum == 1) image = right1;
 		if (spriteNum == 2) image = right2;
-			break;
+        break;
 
 		}
-		g2.drawImage(image, screenX, screenY, gp.tileSize, gp.tileSize, null);
+		g2.drawImage(image, screenX, screenY, null);
 		}
 
 

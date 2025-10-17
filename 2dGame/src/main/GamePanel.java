@@ -25,8 +25,7 @@ public class GamePanel extends JPanel implements Runnable{
 	//WORLD MAP PARAMETERS
 	public final int maxWorldCol = 50;
 	public final int maxWorldRow = 50;
-	public final int worldWidth = tileSize * maxWorldCol;
-	public final int worldHeight = tileSize * maxWorldRow;
+
 	//FPS
 	int FPS = 60;
 	
@@ -34,9 +33,14 @@ public class GamePanel extends JPanel implements Runnable{
 	
 	TileManager tileM = new TileManager(this);
 	GameKeyHandler  keyH = new GameKeyHandler();
-	Thread gameThread;
+    Sound music = new Sound();
+    Sound se = new Sound();
+
 	public CollisionChecker cChecker = new CollisionChecker(this);
 	public AssetSetter aSetter = new AssetSetter(this);
+    public UI ui = new UI(this);
+    Thread gameThread;
+
 	public Player player = new Player(this,keyH);
 	public SuperObject obj[] = new SuperObject[10];
 	
@@ -58,7 +62,7 @@ public class GamePanel extends JPanel implements Runnable{
 	public void setupGame(){
 	
 		aSetter.setObject();
-
+        playMusic(0);
 
 	}
 	public void startGameThread(){
@@ -104,10 +108,14 @@ public class GamePanel extends JPanel implements Runnable{
 	public void paintComponent(Graphics g) {
 	
 		super.paintComponent(g);
-
 		Graphics2D g2 = (Graphics2D)g; 
-		
+
+        //DEBUG
+        long drawStart = 0;
+        if(keyH.checkDrawTime){
+                drawStart = System.nanoTime(); }
 		tileM.draw(g2);
+
 		for (int i = 0; i < obj.length; i++){
 
 
@@ -118,14 +126,38 @@ public class GamePanel extends JPanel implements Runnable{
 
 			}
 
-
-
-
 		}
-		player.draw(g2);
 
+        ui.draw(g2);
+        player.draw(g2);
+        if (keyH.checkDrawTime) {
+            long drawEnd = System.nanoTime();
+            long passed = drawEnd - drawStart;
+            g2.setColor(Color.WHITE);
+            g2.drawString("Draw Time: " + passed, 10, 400);
+            System.out.println("Draw Time: " + passed);
+        }
 		g2.dispose();
 
 	}
+    public void playMusic(int i ){
 
-}
+        music.setFile(i);
+        music.play();
+        music.loop();
+
+
+
+    }
+    public void stopMusic(){
+        music.stop();
+    }
+
+    public void playSE(int i){
+
+        se.setFile(i);
+        se.play();
+
+    }
+    }
+
