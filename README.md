@@ -12,7 +12,11 @@ Pause menu with keyboard toggle (P)
 Debug mode — press T to display real-time draw time overlay
 
 Controls
-KeyActionW / A / S / DMovePPause / UnpauseTToggle debug draw time
+Key 
+Action
+W / A / S / D Move
+P Pause / Unpause
+T Toggle debug draw time
 How to Run
 
 Clone the repository
